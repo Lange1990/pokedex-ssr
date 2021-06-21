@@ -67,7 +67,7 @@ module.exports = {
         __dirname: false,
         __filename: false,
     },
-    entry: [path.resolve(__dirname, '..', '..', 'src', 'server', 'server.jsx')],
+    entry: [path.resolve(__dirname, '..', '..', 'src', 'server', 'server.js')],
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx'],
     },
