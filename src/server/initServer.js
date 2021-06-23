@@ -32,28 +32,30 @@ const initServer = () => {
     app.engine('ejs', ejs.renderFile);
 
     //Styles injection
-    const stylesheetFilename = fs
-                .readdirSync(path.resolve(__dirname, './static'))
-                .find((filename) => /^.*style.*\.css$/.test(filename));
-    if (!stylesheetFilename){
-        throw new Error(`Cannot find the stylesheet in ${path.resolve(__dirname, './static')}`);
-    }
-    app.use((req, res, next) => {
-        const render = res.render;
-        res.render = function (
-            view,
-            options,
-            callback,
-        ) {
-            const _render = render.bind(this);
+    if (!INJECT_STYLES) {
+        const stylesheetFilename = fs
+                    .readdirSync(path.resolve(__dirname, './static'))
+                    .find((filename) => /^.*style.*\.css$/.test(filename));
+        if (!stylesheetFilename){
+            throw new Error(`Cannot find the stylesheet in ${path.resolve(__dirname, './static')}`);
+        }
+        app.use((req, res, next) => {
+            const render = res.render;
+            res.render = function (
+                view,
+                options,
+                callback,
+            ) {
+                const _render = render.bind(this);
 
-            if (typeof options === 'function') {
-                callback = options;
-                _render(view, { stylesheetFilename }, callback);
-            } else _render(view, { stylesheetFilename, ...options }, callback);
-        };
-        next();
-    });
+                if (typeof options === 'function') {
+                    callback = options;
+                    _render(view, { stylesheetFilename }, callback);
+                } else _render(view, { stylesheetFilename, ...options }, callback);
+            };
+            next();
+        });
+    }
 
     // Bundle injection
     const clientBundleFilename = devMode
