@@ -1,23 +1,8 @@
-const webpack = require('webpack');
 const path = require('path');
 const merge = require('webpack-merge').merge;
 const common = require('./webpack.common');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-const sassRules = {
-    test: /\.s[ac]ss$/,
-    // If styles will be served separately, the server will extract them to create the stylesheet to link on request
-    use: [
-              'style-loader',
-              'css-loader',
-              {
-                  loader: 'sass-loader',
-                  options: {
-                      sourceMap: true,
-                  },
-              },
-          ]
-}
 const cssRules = {
     test: /\.css$/,
     use: ['style-loader', 'css-loader']
@@ -25,15 +10,6 @@ const cssRules = {
 
 module.exports = merge(common, {
     mode: 'production',
-    // entry: {
-    //     // 'styles.bundle': './client/src/styles.js',
-    //     'client.bundle': '/src/client/src/index.jsx',
-    //     app: '/src/client/src/index.jsx'
-    // },
-    // output: {
-    //     path: path.resolve(__dirname, 'build'),
-    //     filename: '[name].js',
-    // },
     output: {
         path: path.resolve(__dirname, '..', '..', 'build', 'static'),
         filename: 'bundle.[hash].js',
@@ -41,20 +17,12 @@ module.exports = merge(common, {
     devtool: 'source-map',
     module: {
         rules: [
-            // {
-            //     test: /\.css$/,
-            //     use: [MiniCssExtractPlugin.loader, 'css-loader'],
-            // },
             cssRules,
-            sassRules,
+            // sassRules,
             {
                 test: /\.(png|svg|jpg|jpeg|gif)$/i,
                 type: 'asset/resource',
             },
-            // {
-            //     test: /\.(svg|png|jpg)$/,
-            //     use: 'url-loader',
-            // },
             {
                 test: /\.jsx?$/,
                 exclude: /(node_modules|bower_components)/,
@@ -73,27 +41,7 @@ module.exports = merge(common, {
             },
         ],
     },
-    // optimization: {
-    //     splitChunks: {
-    //         cacheGroups: {
-    //             commons: {
-    //                 test: /[\\/]node_modules[\\/]/,
-    //                 name: 'vendors.bundle',
-    //                 chunks: 'all',
-    //             },
-    //         },
-    //     },
-    // },
     plugins: [
-        // new webpack.DefinePlugin({
-        //     'process.env': {
-        //         NODE_ENV: JSON.stringify('production'),
-        //     },
-        // }),
-        // new MiniCssExtractPlugin({
-        //     filename: '[name].css',
-        //     chunkFilename: '[id].css',
-        // }),
         ...(false
             ? []
             : [

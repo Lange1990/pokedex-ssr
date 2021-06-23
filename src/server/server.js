@@ -3,7 +3,6 @@ import { StaticRouter } from 'react-router-dom';
 import ReactDOMServer from 'react-dom/server';
 import Wrapper from '../client/src/wrapper.jsx';
 import initServer from './initServer';
-
 const { app, port } = initServer();
 
 app.get('/*', (req, res) => {
@@ -22,5 +21,5 @@ app.get('/*', (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log('Node app is running on http://localhost:'.concat(port));
+    console.log('App corriendo en el http://localhost:'.concat(port));
 });

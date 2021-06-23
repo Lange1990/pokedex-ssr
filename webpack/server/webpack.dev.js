@@ -4,7 +4,8 @@ const webpack = require('webpack');
 const dotenv = require('dotenv');
 const webpackNodeExternals = require('webpack-node-externals');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { staticDirname, serverPort, injectStyles, minimizeServerBundle } = require('../../config');
+const { devBuildPath } = require('../../config');
+
 const common = require('./webpack.common');
 
 const rules = [
@@ -14,7 +15,7 @@ const rules = [
         use: {
             loader: 'babel-loader',
             options: {
-                comments: true, // Preserve webpack magic comments
+                comments: true,
                 sourceMaps: true,
                 presets: ['@babel/preset-env', '@babel/preset-react'],
                 plugins: [
@@ -32,10 +33,13 @@ const rules = [
 
 module.exports = merge(common, {
     name: 'server',
-    mode: 'production',
+    mode: 'development',
     output: {
-        path: path.resolve(__dirname, '..', '..', 'build'),
+        path: path.resolve(devBuildPath),
         filename: 'server.js',
+        libraryTarget: 'commonjs2',
+        // clean: true,
+        publicPath: '/',
     },
     optimization: {
         minimize: false,
@@ -46,26 +50,23 @@ module.exports = merge(common, {
     externals: [...(false ? [webpackNodeExternals()] : [])],
     module: { rules },
     plugins: [
-        // Override process.env with custom vars defined in .env
         new webpack.DefinePlugin(
             Object.fromEntries(
                 Object.entries({
-                    NODE_ENV: 'production',
+                    NODE_ENV: 'development',
                     STATIC_DIRNAME: 'static',
                     PORT: 4123,
-                    INJECT_STYLES: injectStyles,
+                    INJECT_STYLES: false,
 
                     ...dotenv.config().parsed,
                 }).map((pair) => ['process.env.' + pair[0], JSON.stringify(pair[1])]),
             ),
         ),
-
-        // Extract styles
         ...(false
             ? []
             : [
                   new MiniCssExtractPlugin({
-                      filename: path.join('static', 'style.[hash].css'),
+                      filename: path.join('static', 'style.css'),
                   }),
               ]),
     ],
