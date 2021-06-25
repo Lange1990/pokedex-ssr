@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import styles from './home.module.scss';
+import styles from '../index.module.scss';
 
 const Chau = ()=>{
     const [visible, setVisible] = useState(false);

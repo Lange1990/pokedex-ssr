@@ -25,7 +25,10 @@ const initServer = () => {
     const app = express();
 
     // Middleware for static files
+    console.log(path.resolve(__dirname))
+    app.use(express.static(path.resolve(__dirname, ''), { maxAge }));
     app.use(express.static(path.resolve(__dirname, 'static'), { maxAge }));
+    
     // Template engine
     app.set('view engine', 'ejs');
     app.set('views', path.join(__dirname, 'views'));
