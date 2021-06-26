@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import styles from "./search.module.scss";
 
-const Search = ({ query }) => {
+const Search = ({ query, handleSubmit }) => {
   const [content, setContent] = useState("");
 
   const handleQuery = (e) => {
+    e.preventDefault()
     setContent(e.target.value);
     query(e.target.value);
   };
-
-  console.log(content);
+  
 
   return (
     <div className={styles.searchContainer}>
-      <form>
+      <form onSubmit={(e)=>handleSubmit(e,content)}>
         <input
           type="text"
           className="form-control"
