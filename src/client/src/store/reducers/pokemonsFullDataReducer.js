@@ -4,8 +4,8 @@ const initialState = {
 
 export default (state = initialState,action)=>{
     switch (action.type) {
-        case "POKEMONS_DATA":
-            return {...state, pokemons: action.pokemons}
+        case "POKEMONS_FULLDATA":
+            return {...state, pokemons: action.pokemon}
         default:
             return state    
     }
