@@ -107,6 +107,7 @@ const Pokemons = ({statePokemons,savePokemons,props,history})=>{
 
     return(
         <div className={styles.container}>
+            <h1>POKEDEX</h1>
             <Search query={(a)=>setQuery(a)} handleSubmit={handleSubmit} />
             {apiError && <h2>Ups! Algo malir sal.</h2>}
             {query.length ? (
