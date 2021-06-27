@@ -8,7 +8,6 @@ import compression from 'compression';
 import minifyHtml from 'express-minify-html-terser';
 
 const initServer = () => {
-    console.log(process.env.NODE_ENV)
     const {
         STATIC_DIRNAME,
         DEV_SERVER_ADDRESS = "localhost",
@@ -18,14 +17,12 @@ const initServer = () => {
         SERVER_PORT,
     } = process.env;
 
-    console.log({NODE_ENV},{INJECT_STYLES})
     const devMode = NODE_ENV === 'development';
     const port = devMode ? 8000 : 9000;
     const maxAge = devMode ? 0 : 31536000;
     const app = express();
 
     // Middleware for static files
-    console.log(path.resolve(__dirname))
     app.use(express.static(path.resolve(__dirname, ''), { maxAge }));
     app.use(express.static(path.resolve(__dirname, 'static'), { maxAge }));
     
@@ -91,13 +88,6 @@ const initServer = () => {
     });
 
     if (devMode) {
-        console.log("DEV-MODE")
-        // [STATIC_DIRNAME, DEV_SERVER_ADDRESS, DEV_SERVER_PORT, NODE_ENV, HMR_SERVER_PORT].forEach((env) => {
-        //     console.log(env)
-        //     // if (!env) throw new Error(`Env key missed. Check webpack.dev.config`);
-        // });
-
-        // Set permissive CORS and CSP directives to avoid cross-domain issues with webpack-dev-server
         app.use(cors());
         app.use(
             csp({
@@ -116,12 +106,7 @@ const initServer = () => {
                 },
             }),
         );
-    } else {
-        [STATIC_DIRNAME, NODE_ENV, SERVER_PORT].forEach((env) => {
-            console.log(env)
-            // if (!env) throw new Error(`Env key missed. Check webpack.prod.config`);
-        });
-
+    } else { 
         // Minify the output on request
         app.use(minifyHtml());
 

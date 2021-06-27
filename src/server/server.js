@@ -23,7 +23,6 @@ app.get('/*', (req, res) => {
     if (context.url) {
         res.redirect(301, context.url);
     } else {
-        // console.log("PRELOADED STATE",preloadedState)
         res.render('index', { content, preloadedState });
     }
 });

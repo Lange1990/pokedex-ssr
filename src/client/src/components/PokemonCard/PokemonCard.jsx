@@ -4,21 +4,12 @@ import { Link, withRouter } from "react-router-dom";
 import { pokemonsFullData } from "../../store/actions/pokemonsFullData";
 import { connect } from "react-redux";
 
-const PokemonCard = ({ pokemon,saveFullDataPokemons,state }) => {
+const PokemonCard = ({ pokemon,saveFullDataPokemons,statePokemons,memorie }) => {
   const [pokemonData, setPokemonData] = useState("");
-  const [pokemonId, setPokemonId] = useState("");
-  const [pokemonTypes, setPokemonTypes] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [imageLoading, setImageLoading] = useState(true);
 
   useEffect(() => {
-    // console.log("Pokemon",pokemon)
-    // state.pokemonsFullData.pokemons.map((pkm)=>{
-    //   if(pkm.name === pokemon){
-    //     return ()
-    //   }
-    // })
-    if(!state.pokemonsFullData.pokemons[pokemon.name]){
+    if(!statePokemons[pokemon.name]){
        if(pokemon.url){
          fetchPokemonData()
         }else{
@@ -27,16 +18,15 @@ const PokemonCard = ({ pokemon,saveFullDataPokemons,state }) => {
           setPokemonData(pkm)
         }
     }else{
-      // setPokemonId(handleIdPad(state.pokemonsFullData.pokemons[pokemon.name].id))
-      setPokemonData(state.pokemonsFullData.pokemons[pokemon.name])
+      setPokemonData(statePokemons[pokemon.name])
     }
   }, []);
+
   const handleIdPad = (id)=>{
     let str = "" + id
     return  "000".substring(0, 3 - str.length) + str
   }
   const fetchPokemonData = async()=>{
-    console.log("Fui a buscar FullData")
     let response = await fetch(pokemon.url,{
         method: "GET",
         headers: {
@@ -45,19 +35,10 @@ const PokemonCard = ({ pokemon,saveFullDataPokemons,state }) => {
     })
     if(response.ok){
         let pkmn = await response.json()
-        
-        // let str = "" + pkmn.id
-        // let pad = "000"
-        // let pkmnId = pad.substring(0, pad.length - str.length) + str
-        // console.log(pkmnId)
-        pkmn.name = pokemon.name
         pkmn.id = handleIdPad(pkmn.id)
-        console.log(pkmn.id)
-        // setPokemonId(handleIdPad(pkmn.id))
         setPokemonData(pkmn)
-        let atrapado = state.pokemonsFullData.pokemons
+        let atrapado = statePokemons
         atrapado[pokemon.name] = pkmn
-        console.log(atrapado)
         saveFullDataPokemons(atrapado)
     }
   }
@@ -72,11 +53,12 @@ const PokemonCard = ({ pokemon,saveFullDataPokemons,state }) => {
         pathname: `/${pokemonData.id}`,
         state: {
           pokemon: pokemonData,
+          memorie: memorie
         }
       }}
       >
         <div className={styles.imgContainer}>
-          {imageLoading && <img src={"/static/pokeball.gif"} alt="Loading" className={styles.loadingImg}/>}
+          {imageLoading && <img src={"/static/pokegif.gif"} alt="Loading" className={styles.loadingImg}/>}
           <img src={`/static/pkmimgs/${pokemonData.id}.png`} onLoad={handleImgLoad} style={imageLoading ? {display: "none"} : { display: "block" }}/>
         </div>
         <div className={styles.textContainer}>
@@ -87,7 +69,7 @@ const PokemonCard = ({ pokemon,saveFullDataPokemons,state }) => {
     );
 };
 
-const mapDispatchToProps = function(dispatch, ownprops) {
+const mapDispatchToProps = function(dispatch,) {
   return {
     saveFullDataPokemons: pkmns => dispatch(pokemonsFullData(pkmns))
   }
@@ -95,7 +77,7 @@ const mapDispatchToProps = function(dispatch, ownprops) {
 
 const mapStateToProps = function(state){
   return {
-    state,
+    statePokemons: state.pokemonsFullData.pokemons,
   }
 }
 

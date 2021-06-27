@@ -1,14 +1,11 @@
 import React from 'react';
 import styles from '../index.module.scss';
-import Pokemons from '../components/Pokemons/pokemons';
-import { withRouter } from 'react-router';
-import { connect } from 'react-redux';
+import Pokemons from '../components/Pokemons/Pokemons';
 
 const App = (props)=>{
-    console.log(props)
     return(
         <div className={styles.container}>
-            <Pokemons />
+            <Pokemons props={props}/>
         </div>
     )
 }

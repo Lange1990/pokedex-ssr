@@ -2,19 +2,14 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useLocation, withRouter } from 'react-router';
+import { Link } from 'react-router-dom';
 import styles from './single.module.scss';
 
-const SinglePokemon = ({history,state})=>{
+const SinglePokemon = ({})=>{
     const [pokemon, setPokemon] = useState(false);
     const location = useLocation();
-    const [urlId, setUrlId] = useState(Number(location.pathname.split("/")[1]))
+    const [urlId, ] = useState(Number(location.pathname.split("/")[1]))
     const [imgId, setImgId] = useState("pokeball.gif")
-    const [imageLoading, setImageLoading] = useState(true);
-    console.log(location)
-    console.log(urlId)
-    // if(window){
-    //     console.log(window.location.ref)
-    // }
     useEffect(async()=>{
         if(location.state){
             setPokemon(location.state.pokemon)
@@ -28,8 +23,6 @@ const SinglePokemon = ({history,state})=>{
             })
             if(response.ok){
                 let pkmn = await response.json()
-                console.log(pkmn)
-                console.log("Busque en la api")
                 setPokemon(pkmn)
             }
         }
@@ -44,17 +37,10 @@ const SinglePokemon = ({history,state})=>{
         }else{
             img = `${id}.png`
         }
-        console.log(img)
         setImgId(img)
 
     },[])
 
-    const handleBack = ()=>{
-        history.push("/")
-    }
-    const handleImgLoad = () =>{
-        setImageLoading(false)
-      }
     return(
         <div className={styles.container}>
            {pokemon ? (
@@ -83,7 +69,14 @@ const SinglePokemon = ({history,state})=>{
                                 </div>
                             </div>
                         </div>
-                    <button onClick={handleBack}>Volver</button>
+                        <Link className={styles.back} 
+                            to={{
+                                pathname: `/`,
+                                state: {
+                                memorie: location.state?.memorie
+                                }
+                            }}
+                        >Volver</Link>
                 </>
            ):(
             <img src={`/static/pkmimgs/pokeball.gif`}  style={{ display: "block" , marginTop: "20px"}}/>

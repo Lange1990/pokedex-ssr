@@ -60,7 +60,7 @@
             }
         }
     }
-    button{
+    .back{
         text-decoration: none;
         background-color: white;
         border: solid 2px black;
@@ -69,6 +69,9 @@
         width: 5rem;
         margin-top: 3rem;
         cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         &:active{
             background-color: rgb(166, 166, 166);
         }

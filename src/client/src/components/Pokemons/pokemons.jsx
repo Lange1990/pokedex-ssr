@@ -1,39 +1,51 @@
 import React, { useState, useEffect } from "react";
 import styles from "./pokemons.module.scss";
 import Pagination from '@material-ui/lab/Pagination';
-import PokemonCard from "../PokemonCard/pokemonCard";
-import Search from "../Search/search";
+import PokemonCard from "../PokemonCard/PokemonCard";
+import Search from "../Search/Search";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { pokemonsData } from "../../store/actions/pokemonsData";
 
-const Pokemons = ({state,savePokemons})=>{
-
+const Pokemons = ({statePokemons,savePokemons,props,history})=>{
+    
     const [pokemons, setPokemons] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
-    const [pkmnPerPage, setPkmnPerPage] = useState(24);
-    const [pages, setPages] = useState(45)
-    const [queryPokemons, setQueryPokemons] = useState([])
-    const [notFound, setNotFound] = useState(false)
-    const [loading, setLoading] = useState(false)
+    const [pkmnPerPage, ] = useState(24);
+    const [page, setPage] = useState(1)
+    const [pages, setPages] = useState(45);
+    const [queryPokemons, setQueryPokemons] = useState([]);
+    const [notFound, setNotFound] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [query, setQuery] = useState("");
-    
+    const [apiError, setApiError] = useState(false);
+
+    let state = props.location.state
+
     useEffect(() => {
-        if(state.pokemonsData.pokemons[currentPage]){
-            console.log("Uso lo que ya busque antes")
-            setPokemons(state.pokemonsData.pokemons[currentPage])
+        if(state?.memorie){
+            if(statePokemons[state.memorie.currentPage]){
+                setPokemons(statePokemons[state.memorie.currentPage])
+                setPage(state.memorie.page)
+                setLoading(false)
+            }else{
+                fetchPokemons()
+            }
         }else{
-            fetchPokemons()
+            if(statePokemons[currentPage]){
+                setPokemons(statePokemons[currentPage])
+                setLoading(false)
+            }else{
+                fetchPokemons()
+            }
         }
-        // console.log(state)
-      }, [currentPage]);
-    
+      }, [currentPage,page]);
+
     useEffect(()=>{
         setNotFound(false)
-        console.log("Query",query)
         let results = []
-        Object.keys(state.pokemonsData.pokemons).map((key)=>{
-            state.pokemonsData.pokemons[key].map((pokemon)=>{
+        Object.keys(statePokemons).map((key)=>{
+            statePokemons[key].map((pokemon)=>{
                 if(pokemon.name.includes(query)){
                     results.push(pokemon)
                 }
@@ -42,8 +54,8 @@ const Pokemons = ({state,savePokemons})=>{
         setQueryPokemons(results)
     }, [query])
 
-    // console.log("Render", pokemons)
     const fetchPokemons = async()=>{
+        setApiError(false)
         let response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${pkmnPerPage}&offset=${currentPage}`,{
             method: "GET",
             headers: {
@@ -52,14 +64,14 @@ const Pokemons = ({state,savePokemons})=>{
         })
         if(response.ok){
             let pkmns = await response.json()
-            console.log(pkmns)
-            console.log("Busque en la api")
             setPages(Math.ceil(pkmns.count / pkmnPerPage))
             setPokemons(pkmns.results)
-            let updated = state.pokemonsData.pokemons
+            setLoading(false)
+            let updated = statePokemons
             updated[currentPage] = pkmns.results
-
             savePokemons(updated)
+        }else{
+            setApiError(true)
         }
     }
     const fetchPokemon = async(pokemon)=>{
@@ -73,10 +85,6 @@ const Pokemons = ({state,savePokemons})=>{
             let pkmn = await response.json()
             setLoading(false)
             setQueryPokemons([pkmn])
-            // setPokemons(pkmns.results)
-            // let updated = state.pokemonsData.pokemons
-            // updated[currentPage] = pkmns.results
-            // savePokemons(updated)
         }else{
             setLoading(false)
             setNotFound(true)
@@ -86,20 +94,22 @@ const Pokemons = ({state,savePokemons})=>{
         e.preventDefault()
         setLoading(true)
         fetchPokemon(content)
-        console.log("Submit",content)
     }
 
     const handlePage = (e, page) => {
-        console.log("PAGEEEEEE",page)
+        setLoading(true)
+        history.replace({state: ""})
+        setPage(page)
         setCurrentPage(page * pkmnPerPage - pkmnPerPage);
     };
 
     return(
         <div className={styles.container}>
             <Search query={(a)=>setQuery(a)} handleSubmit={handleSubmit} />
+            {apiError && <h2>Ups! Algo malir sal.</h2>}
             {query.length ? (
                 <div className={styles.cardBox}> 
-                    {loading && <img src={"/static/pokeball.gif"}/>}
+                    {loading && <img src={"/static/pokegif.gif"}/>}
                     {queryPokemons.map((pokemon)=>{
                         return ( <PokemonCard key={pokemon.name} pokemon={pokemon} />)
                     })}
@@ -107,25 +117,23 @@ const Pokemons = ({state,savePokemons})=>{
                 </div>
             ):(
                 <div className={styles.cardBox}>            
-                    {pokemons ? (
+                    {!loading ? (
                         pokemons.map((pokemon)=>{
                             return(
-                                <PokemonCard key={pokemon.name} pokemon={pokemon} />
+                                <PokemonCard key={pokemon.name} pokemon={pokemon} memorie={{page,currentPage}} />
                             )
                         })
                     ):(
-                        <p>Loading,,,</p>
+                        <img src={"/static/pokegif.gif"}/>
                     )}
-                    <Pagination count={pages} variant="outlined" color="secondary" onChange={handlePage} style={{marginTop: "30px"}} />
                 </div>
             )}
-            
-            
+            {!query.length && <Pagination count={pages} variant="outlined" color="secondary" onChange={handlePage} className={styles.pagination} page={page}/>}    
         </div>
     )
 }
 
-const mapDispatchToProps = function(dispatch, ownprops) {
+const mapDispatchToProps = function(dispatch,) {
     return {
       savePokemons: pkmns => dispatch(pokemonsData(pkmns))
     }
@@ -133,7 +141,7 @@ const mapDispatchToProps = function(dispatch, ownprops) {
   
   const mapStateToProps = function(state){
     return {
-      state,
+      statePokemons: state.pokemonsData.pokemons,
     }
   }
 
