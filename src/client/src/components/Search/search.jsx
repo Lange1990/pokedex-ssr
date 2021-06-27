@@ -17,7 +17,7 @@ const Search = ({ query, handleSubmit }) => {
         <input
           type="text"
           className="form-control"
-          placeholder="Search your Pokémon"
+          placeholder="Search Pokémon by name or id..."
           value={content}
           onChange={handleQuery}
           autoFocus

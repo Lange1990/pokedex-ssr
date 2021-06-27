@@ -46,7 +46,8 @@ const Pokemons = ({statePokemons,savePokemons,props,history})=>{
         let results = []
         Object.keys(statePokemons).map((key)=>{
             statePokemons[key].map((pokemon)=>{
-                if(pokemon.name.includes(query)){
+                console.log(pokemon)
+                if(pokemon.name.includes(query) || pokemon.url.includes(Number(query))){
                     results.push(pokemon)
                 }
             })
@@ -75,7 +76,8 @@ const Pokemons = ({statePokemons,savePokemons,props,history})=>{
         }
     }
     const fetchPokemon = async(pokemon)=>{
-        let response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon}`,{
+        let find = Number(pokemon) ? Number(pokemon) : pokemon.toLowerCase()
+        let response = await fetch(`https://pokeapi.co/api/v2/pokemon/${find}`,{
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

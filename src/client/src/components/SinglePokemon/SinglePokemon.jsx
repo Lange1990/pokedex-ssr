@@ -40,6 +40,9 @@ const SinglePokemon = ({})=>{
         setImgId(img)
 
     },[])
+    const addDefaultSrc =(ev)=>{
+        ev.target.src = `/static/pkmimgs/noimg.gif`
+    }
 
     return(
         <div className={styles.container}>
@@ -47,24 +50,34 @@ const SinglePokemon = ({})=>{
                     <>
                         <div className={styles.cardContainer}>
                             <div className={styles.image}>
-                                <img src={`/static/pkmimgs/${imgId}`}  style={{ display: "block" , marginTop: "20px"}}/>
+                                <img src={`/static/pkmimgs/${imgId}`} onError={addDefaultSrc}/>
                             </div>
                             <div className={styles.dataConatiner}>
                                 <h1>{pokemon.name}<span>#{pokemon.id}</span></h1>
                                 <div className={styles.data}>
-                                    <div className={styles.left}>
+                                    <div>
                                         <h2>Height</h2>
-                                        <h3>{pokemon.height}</h3>
+                                        <h3>{pokemon.height/10} meters</h3>
                                         <br/>
                                         <h2>Weight</h2>
-                                        <h3>{pokemon.weight}</h3>
+                                        <h3>{pokemon.weight/10} kilograms</h3>
                                     </div>
                                     <div className={styles.right}>
                                         <h2>Types</h2>
-                                        <h3>{pokemon.types[0].type.name}</h3>
+                                        {pokemon.types.map(type=>{
+                                            console.log(type)
+                                            return (
+                                                <h4 className={styles[type.type.name]}>{type.type.name}</h4>
+                                            )
+                                        })}
                                         <br/>
                                         <h2>Abilities</h2>
-                                        <h3>{pokemon.abilities[0].ability.name}</h3>
+                                        {pokemon.abilities.map(ability=>{
+                                            console.log(ability)
+                                            return (
+                                                <h3>{ability.ability.name}</h3>
+                                            )
+                                        })}
                                     </div>
                                 </div>
                             </div>
@@ -76,6 +89,7 @@ const SinglePokemon = ({})=>{
                                 memorie: location.state?.memorie
                                 }
                             }}
+                            disabled={true}
                         >Volver</Link>
                 </>
            ):(

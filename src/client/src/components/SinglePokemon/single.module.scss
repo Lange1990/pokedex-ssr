@@ -6,20 +6,44 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    &:before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        // background: #29bade;
+        border-radius: 100%;
+        -webkit-transform: scale(2);
+        transform: scale(2);
+        -webkit-transition-property: transform;
+        transition-property: transform;
+        -webkit-transition: 0.5s ease-out;
+        transition: 0.5s ease-out;
+      }
+      &:hover:before {
+        -webkit-transform: scale(0);
+        transform: scale(0);
+      }
     .cardContainer{
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: center;
-        width: 70%;
-        height: 300px;
+        width: 50%;
+        height: auto;
+        min-height: 250px;
         border: solid 2px black;
         border-radius: 1rem;
         .image{
             width: 30%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             img{
-                width: 200px;
-                float: right;
+                width: 180px;
             }
         }
         .dataConatiner{
@@ -43,6 +67,7 @@
             h3{
                 margin: 0;
                 font-weight: 300;
+                
             }
             h3::first-letter{
                 text-transform: uppercase;
@@ -51,17 +76,29 @@
                 display: flex;
                 justify-content: space-between;
                 width: 100%;
-                .left{
-
-                }
                 .right{
-
+                    h4{
+                        height: 25px;
+                        font-weight: 400;
+                        color: white;
+                        border: solid 1px;
+                        border-radius: 5px;
+                        text-align: center;
+                        margin:0;
+                        padding-top: 5px;
+                        &::first-letter{
+                            text-transform: uppercase;
+                        }
+                    }
+                    width: 20%;
+                    margin-bottom: 20px;
                 }
             }
         }
     }
     .back{
         text-decoration: none;
+        color: black;
         background-color: white;
         border: solid 2px black;
         border-radius: 1rem;
@@ -74,6 +111,137 @@
         align-items: center;
         &:active{
             background-color: rgb(166, 166, 166);
+            color: white;
         }
+        &:visited{
+            color: black;
+        }
+    }
+    
+}
+
+.normal {
+    background-color: #a8a878;
+    &:hover {
+        background-color: #6d6d4e;
+    }
+}
+
+.fire {
+    background-color: #f08030;
+    &:hover {
+        background-color: #9c531f;
+    }
+}
+
+.water {
+    background-color: #6890f0;
+    &:hover {
+        background-color: #445e9c;
+    }
+}
+
+.electric {
+    background-color: #f8d030;
+    &:hover {
+        background-color: #a1871f;
+    }
+}
+
+.grass {
+    background-color: #78c850;
+    &:hover {
+        background-color: #4e8234;
+    }
+}
+
+.ice {
+    background-color: #98d8d8;
+    &:hover {
+        background-color: #638d8d;
+    }
+}
+
+.ground {
+    background-color: #e0c068;
+    &:hover {
+        background-color: #927d44;
+    }
+}
+
+.flying {
+    background-color: #a890f0;
+    &:hover {
+        background-color: #6d5e9c;
+    }
+}
+
+.ghost {
+    background-color: #705898;
+    &:hover {
+        background-color: #493963;
+    }
+}
+
+.rock {
+    background-color: #b8a038;
+    &:hover {
+        background-color: #786824;
+    }
+}
+
+.lighting {
+    background-color: #c03028;
+    &:hover {
+        background-color: #7d1f1a;
+    }
+}
+
+.poison {
+    background-color: #a040a0;
+    &:hover {
+        background-color: #682a68;
+    }
+}
+
+.psychic {
+    background-color: #f85888;
+    &:hover {
+        background-color: #a13959;
+    }
+}
+
+.bug {
+    background-color: #a8b820;
+    &:hover {
+        background-color: #6d7815;
+    }
+}
+
+.dark {
+    background-color: #705848;
+    &:hover {
+        background-color: #49392f;
+    }
+}
+
+.steel {
+    background-color: #b8b8d0;
+    &:hover {
+        background-color: #787887;
+    }
+}
+
+.dragon {
+    background-color: #7038f8;
+    &:hover {
+        background-color: #4924a1;
+    }
+}
+
+.fairy {
+    background-color: #f781d8;
+    &:hover {
+        background-color: #fa58f4;
     }
 }

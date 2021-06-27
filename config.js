@@ -19,7 +19,7 @@ module.exports = {
     serverViewsPath: path.resolve(__dirname, 'src', 'server', 'views'),
 
     // Server port in development
-    devServerPort: 3000,
+    devServerPort: 8000,
 
     // webpack-dev-server port for the client development bundle. It must be different from devServerPort
     clientDevServerPort: 3100,
