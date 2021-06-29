@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./pokemons.module.scss";
 import Pagination from '@material-ui/lab/Pagination';
 import PokemonCard from "../PokemonCard/PokemonCard";
-import Search from "../Search/Search";
+import Search from "../Search/search";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { pokemonsData } from "../../store/actions/pokemonsData";
