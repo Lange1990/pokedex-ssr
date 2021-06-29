@@ -45,6 +45,7 @@
     "webpack-node-externals": "^3.0.0"
   },
   "dependencies": {
+    "@material-ui/core",
     "@material-ui/lab": "*",
     "add": "^2.0.6",
     "bootstrap": "^5.0.2",
